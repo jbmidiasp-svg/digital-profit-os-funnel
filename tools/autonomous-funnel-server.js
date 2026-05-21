@@ -1,17 +1,37 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const CONFIG_PATH = path.join(ROOT, "autonomous-funnel", "config.json");
 const DEFAULT_CONFIG = {
   product: {
     id: "pack_30_posts_salao_v1",
-    name: "Pack 30 Posts + Mensagens Prontas para Salao e Barbearia",
-    promise: "Posts, legendas, chamadas de WhatsApp e calendario de 7 dias para divulgar agenda e promocoes sem criar texto do zero.",
+    name: "Agenda Cheia Pack",
+    headline: "30 posts e mensagens prontas para preencher horarios vagos esta semana",
+    subheadline: "Um kit direto para saloes, barbearias, manicures e estetica local copiarem, adaptarem e publicarem no Instagram, Status e WhatsApp em menos de 10 minutos.",
+    promise: "Posts, legendas, chamadas de WhatsApp e calendario de 7 dias para divulgar agenda, servicos e promocoes sem criar texto do zero.",
     price_brl: 19,
     currency: "BRL",
     cta: "Comprar e receber agora",
+    support_scope: "Inclui arquivo editavel, instrucoes curtas e FAQ. Nao inclui gestao de perfil, design personalizado ou atendimento individual prolongado.",
+    audience: "Para profissionais de beleza que ja atendem pelo WhatsApp e precisam publicar com mais constancia sem contratar social media.",
+    outcome: "Transformar fotos simples do proprio servico em chamadas claras para agendamento.",
+    not_for: "Nao e para quem busca gestao completa de Instagram, artes personalizadas ou promessa de agenda cheia garantida.",
+    includes: [
+      "30 ideias de posts com legenda pronta",
+      "15 mensagens curtas para WhatsApp",
+      "7 dias de calendario de publicacao",
+      "Promocoes simples para horarios vagos",
+      "FAQ e instrucoes de uso em menos de 10 minutos",
+    ],
+    preview: [
+      "Agenda da semana aberta para [servico]. Quer garantir seu horario? Chama no WhatsApp.",
+      "Ainda temos poucos horarios para [dia]. Se voce quer sair pronto(a) para a semana, chama agora.",
+      "Oi, [nome]. Temos horario para [servico] em [dia] as [hora]. Quer reservar?",
+    ],
+    trust_points: ["Entrega digital simples", "Preco de validacao: R$19", "Sem assinatura", "Uso imediato com fotos do proprio negocio"],
   },
 };
 
@@ -49,7 +69,7 @@ function safeEqual(left, right) {
   const a = Buffer.from(String(left || ""), "utf8");
   const b = Buffer.from(String(right || ""), "utf8");
   if (a.length !== b.length) return false;
-  return require("crypto").timingSafeEqual(a, b);
+  return crypto.timingSafeEqual(a, b);
 }
 
 function send(res, status, body, type = "text/html; charset=utf-8") {
@@ -169,7 +189,6 @@ function readiness() {
     blocked,
     warnings,
     dependsOnUser: [
-      { id: "render", label: "Confirmar Render Free/R$0" },
       { id: "persistence", label: "Resolver persistencia confiavel antes de Mercado Pago real" },
       { id: "mercado_pago", label: "Mercado Pago fica para etapa posterior" },
     ],
@@ -178,7 +197,86 @@ function readiness() {
 
 function renderOffer() {
   const product = getConfig().product || DEFAULT_CONFIG.product;
-  return `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(product.name)}</title><body style="font-family:Arial,sans-serif;max-width:760px;margin:48px auto;padding:0 18px;line-height:1.55"><p style="font-size:12px;text-transform:uppercase;font-weight:700;color:#67552c">Entrega digital imediata</p><h1>${escapeHtml(product.name)}</h1><p>${escapeHtml(product.promise)}</p><p style="font-size:30px;font-weight:800">R$ ${Number(product.price_brl || 19).toFixed(2).replace(".", ",")}</p><p><a href="/checkout" style="display:inline-block;background:#111;color:#fff;padding:14px 18px;border-radius:6px;text-decoration:none;font-weight:700">${escapeHtml(product.cta || "Comprar")}</a></p><p style="color:#555;font-size:14px">Preflight Render Free: checkout real bloqueado ate Mercado Pago, persistencia e aprovacao humana.</p></body></html>`;
+  const includes = Array.isArray(product.includes) ? product.includes : DEFAULT_CONFIG.product.includes;
+  const preview = Array.isArray(product.preview) ? product.preview : DEFAULT_CONFIG.product.preview;
+  const trustPoints = Array.isArray(product.trust_points) ? product.trust_points : DEFAULT_CONFIG.product.trust_points;
+  const headline = product.headline || product.name;
+  const subheadline = product.subheadline || product.promise;
+  const price = Number(product.price_brl || 19).toFixed(2).replace(".", ",");
+
+  return `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(product.name)}</title>
+  <style>
+    :root { --ink:#18211d; --muted:#56615b; --line:#dfe5dd; --paper:#fbfaf6; --accent:#0f6b4d; --accent-dark:#0a4937; --soft:#e8f4ee; --warm:#f6e7c8; }
+    * { box-sizing:border-box; }
+    body { font-family:Arial,sans-serif; margin:0; color:var(--ink); background:linear-gradient(180deg,#f7fbf6 0%,var(--paper) 45%,#fff 100%); }
+    main { width:min(1120px,calc(100% - 36px)); margin:0 auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 0; border-bottom:1px solid rgba(24,33,29,.08); font-size:14px; }
+    .brand { font-weight:800; }
+    .topbar span:last-child { color:var(--muted); text-align:right; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr); gap:44px; align-items:center; padding:58px 0 34px; }
+    .tag { display:inline-flex; width:fit-content; color:var(--accent-dark); background:var(--soft); border:1px solid #c8e4d6; font-weight:800; text-transform:uppercase; font-size:12px; padding:7px 10px; border-radius:999px; letter-spacing:.08em; }
+    h1 { font-size:clamp(34px,6vw,64px); line-height:1.02; margin:18px 0 16px; letter-spacing:0; max-width:780px; }
+    h2 { font-size:28px; line-height:1.12; margin:0 0 12px; letter-spacing:0; }
+    p { font-size:18px; line-height:1.55; color:var(--muted); margin:0 0 18px; }
+    .lead { font-size:20px; max-width:700px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin:28px 0 14px; }
+    .price { display:inline-flex; align-items:baseline; gap:6px; color:var(--ink); font-size:38px; font-weight:900; line-height:1; }
+    .price small { color:var(--muted); font-size:14px; font-weight:700; }
+    .button { display:inline-flex; align-items:center; justify-content:center; min-height:48px; background:var(--accent); color:#fff; padding:14px 18px; border-radius:8px; text-decoration:none; font-weight:800; box-shadow:0 12px 24px rgba(15,107,77,.18); }
+    .button:hover { background:var(--accent-dark); }
+    .hero-card,.section,.sample { background:rgba(255,255,255,.88); border:1px solid var(--line); border-radius:8px; box-shadow:0 18px 50px rgba(32,48,38,.08); }
+    .hero-card { padding:22px; }
+    .mini-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0 18px; }
+    .metric { background:#f7faf6; border:1px solid var(--line); border-radius:8px; padding:14px 12px; }
+    .metric strong { display:block; font-size:24px; line-height:1; }
+    .metric span { display:block; color:var(--muted); font-size:13px; margin-top:6px; }
+    .section-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:28px 0; }
+    .section { padding:22px; box-shadow:none; }
+    ul { list-style:none; padding:0; margin:16px 0 0; font-size:16px; line-height:1.5; }
+    li { display:flex; gap:10px; margin:10px 0; color:var(--ink); }
+    li::before { content:""; flex:0 0 7px; width:7px; height:7px; margin-top:9px; border-radius:50%; background:var(--accent); }
+    .sample { padding:18px; background:#10241c; color:#eef8f1; }
+    .sample p { color:#c9ddd2; font-size:15px; margin-bottom:12px; }
+    .sample blockquote { margin:10px 0 0; padding:12px 14px; border-left:3px solid var(--warm); background:rgba(255,255,255,.06); border-radius:6px; line-height:1.45; }
+    .trust-row { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 0; }
+    .pill { border:1px solid #cdd8d1; background:#fff; border-radius:999px; color:var(--muted); padding:8px 10px; font-size:14px; }
+    .closing { padding:34px 0 54px; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:center; border-top:1px solid var(--line); margin-top:18px; }
+    .note { color:var(--muted); font-size:14px; margin-top:10px; }
+    @media (max-width:820px) { main { width:min(100% - 28px,1120px); } .hero,.section-grid,.closing { grid-template-columns:1fr; } .hero { padding-top:34px; gap:26px; } .mini-grid { grid-template-columns:1fr; } .topbar { align-items:flex-start; } .hero-actions { align-items:flex-start; flex-direction:column; } .button { width:100%; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topbar"><span class="brand">${escapeHtml(product.name)}</span><span>Produto digital para beleza local</span></div>
+    <section class="hero" aria-labelledby="headline">
+      <div>
+        <div class="tag">Entrega digital imediata</div>
+        <h1 id="headline">${escapeHtml(headline)}</h1>
+        <p class="lead">${escapeHtml(subheadline)}</p>
+        <div class="hero-actions"><a class="button" href="/checkout">${escapeHtml(product.cta || "Comprar")}</a><div class="price">R$ ${price} <small>pagamento unico</small></div></div>
+        <div class="trust-row">${trustPoints.map((item) => `<span class="pill">${escapeHtml(item)}</span>`).join("\n")}</div>
+      </div>
+      <aside class="hero-card" aria-label="Resumo do produto">
+        <h2>O que voce recebe</h2>
+        <p>${escapeHtml(product.outcome || product.promise)}</p>
+        <div class="mini-grid"><div class="metric"><strong>30</strong><span>ideias com legenda</span></div><div class="metric"><strong>15</strong><span>mensagens WhatsApp</span></div><div class="metric"><strong>7</strong><span>dias de calendario</span></div></div>
+        <ul>${includes.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n")}</ul>
+      </aside>
+    </section>
+    <section class="section-grid" aria-label="Detalhes da oferta">
+      <article class="section"><h2>Feito para agenda real</h2><p>${escapeHtml(product.audience || "Para negocios locais que precisam publicar com constancia.")}</p></article>
+      <article class="section"><h2>Sem promessa falsa</h2><p>${escapeHtml(product.not_for || product.support_scope || "Oferta digital simples, sem gestao personalizada.")}</p></article>
+      <article class="sample"><h2>Amostra do conteudo</h2><p>Trechos que ja vem prontos para adaptar.</p>${preview.map((item) => `<blockquote>${escapeHtml(item)}</blockquote>`).join("\n")}</article>
+    </section>
+    <section class="closing" aria-label="Comprar"><div><h2>Pronto para copiar, adaptar e publicar</h2><p>Use com foto do proprio atendimento, modelo simples do Canva ou status do WhatsApp. O objetivo e tirar o bloqueio de "o que postar hoje" e chamar clientes para horario.</p><p class="note">${escapeHtml(product.support_scope || "Suporte simples para acesso ao arquivo.")}</p></div><div><a class="button" href="/checkout">${escapeHtml(product.cta || "Comprar")}</a><p class="note">Acesso liberado automaticamente apos pagamento aprovado.</p></div></section>
+  </main>
+</body>
+</html>`;
 }
 
 function renderBlocked() {
