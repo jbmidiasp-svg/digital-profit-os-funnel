@@ -9,11 +9,35 @@
   },
   "product": {
     "id": "pack_30_posts_salao_v1",
-    "name": "Pack 30 Posts + Mensagens Prontas para Salao e Barbearia",
-    "promise": "Posts, legendas, chamadas de WhatsApp e calendario de 7 dias para divulgar agenda e promocoes sem criar texto do zero.",
+    "name": "Agenda Cheia Pack",
+    "headline": "30 posts e mensagens prontas para preencher horarios vagos esta semana",
+    "subheadline": "Um kit direto para saloes, barbearias, manicures e estetica local copiarem, adaptarem e publicarem no Instagram, Status e WhatsApp em menos de 10 minutos.",
+    "promise": "Posts, legendas, chamadas de WhatsApp e calendario de 7 dias para divulgar agenda, servicos e promocoes sem criar texto do zero.",
     "price_brl": 19,
     "currency": "BRL",
-    "cta": "Comprar e receber agora"
+    "cta": "Comprar e receber agora",
+    "support_scope": "Inclui arquivo editavel, instrucoes curtas e FAQ. Nao inclui gestao de perfil, design personalizado ou atendimento individual prolongado.",
+    "audience": "Para profissionais de beleza que ja atendem pelo WhatsApp e precisam publicar com mais constancia sem contratar social media.",
+    "outcome": "Transformar fotos simples do proprio servico em chamadas claras para agendamento.",
+    "not_for": "Nao e para quem busca gestao completa de Instagram, artes personalizadas ou promessa de agenda cheia garantida.",
+    "includes": [
+      "30 ideias de posts com legenda pronta",
+      "15 mensagens curtas para WhatsApp",
+      "7 dias de calendario de publicacao",
+      "Promocoes simples para horarios vagos",
+      "FAQ e instrucoes de uso em menos de 10 minutos"
+    ],
+    "preview": [
+      "Agenda da semana aberta para [servico]. Quer garantir seu horario? Chama no WhatsApp.",
+      "Ainda temos poucos horarios para [dia]. Se voce quer sair pronto(a) para a semana, chama agora.",
+      "Oi, [nome]. Temos horario para [servico] em [dia] as [hora]. Quer reservar?"
+    ],
+    "trust_points": [
+      "Entrega digital simples",
+      "Preco de validacao: R$19",
+      "Sem assinatura",
+      "Uso imediato com fotos do proprio negocio"
+    ]
   },
   "guardrails": {
     "real_sales_approved": false,
