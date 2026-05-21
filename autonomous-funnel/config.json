@@ -1,0 +1,24 @@
+{
+  "version": "autonomous-funnel-v1",
+  "stage": "render_free_preflight_blocked",
+  "deployment": {
+    "recommended_free_platform": "render",
+    "cost_brl": 0,
+    "domain_policy": "use_free_platform_subdomain",
+    "persistence_policy": "render_free_filesystem_is_ephemeral_not_valid_for_real_sales"
+  },
+  "product": {
+    "id": "pack_30_posts_salao_v1",
+    "name": "Pack 30 Posts + Mensagens Prontas para Salao e Barbearia",
+    "promise": "Posts, legendas, chamadas de WhatsApp e calendario de 7 dias para divulgar agenda e promocoes sem criar texto do zero.",
+    "price_brl": 19,
+    "currency": "BRL",
+    "cta": "Comprar e receber agora"
+  },
+  "guardrails": {
+    "real_sales_approved": false,
+    "ads_approved": false,
+    "persistence_trusted_for_real_sales": false,
+    "mercado_pago_configured": false
+  }
+}

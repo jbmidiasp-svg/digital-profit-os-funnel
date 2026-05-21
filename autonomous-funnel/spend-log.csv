@@ -1,0 +1,2 @@
+date,item,category,amount_brl,status,free_option_checked,free_option,paid_option,paid_justification,learning_expected,increases_first_sale_chance,required_for_operation,human_approved,notes
+2026-05-20,Render Free preflight,hosting,0,approved,yes,Render Free,none,free public HTTPS preflight,validate deploy readiness,yes,yes,yes,cost R$0; sale blocked

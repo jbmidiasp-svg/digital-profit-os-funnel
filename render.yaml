@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: digital-profit-os-funnel
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: DEPLOY_PLATFORM
+        value: render
+      - key: FREE_DEPLOY_CONFIRMED
+        value: "true"
+      - key: FUNNEL_ENV
+        value: production
+      - key: FUNNEL_TEST_MODE
+        value: "false"
+      - key: REAL_SALES_APPROVED
+        value: "false"
+      - key: ADS_APPROVED
+        value: "false"
+      - key: PERSISTENCE_TRUSTED_FOR_REAL_SALES
+        value: "false"
+      - key: FUNNEL_EVENT_LOG
+        value: /tmp/digital-profit-os/event-log.jsonl
+      - key: FUNNEL_ORDERS
+        value: /tmp/digital-profit-os/orders.json
+      - key: FUNNEL_SPEND_LOG
+        value: /tmp/digital-profit-os/spend-log.csv
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: DELIVERY_SECRET
+        sync: false
+      - key: REPORT_SECRET
+        sync: false

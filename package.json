@@ -1,0 +1,14 @@
+{
+  "name": "digital-profit-os-funnel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal blocked Render Free preflight funnel for Digital Profit OS.",
+  "main": "tools/autonomous-funnel-server.js",
+  "scripts": {
+    "start": "node tools/autonomous-funnel-server.js",
+    "check": "node --check tools/autonomous-funnel-server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

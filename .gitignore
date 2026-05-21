@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+!.env.render.example
+
+node_modules/
+npm-debug.log*
+
+.autonomous-runtime/
+autonomous-funnel/event-log.jsonl
+autonomous-funnel/orders.json
+autonomous-funnel/loop-log.jsonl
