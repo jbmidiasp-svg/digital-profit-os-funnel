@@ -1,6 +1,6 @@
 {
   "version": "autonomous-funnel-v1",
-  "stage": "render_free_preflight_blocked",
+  "stage": "mercado_pago_preproduction_blocked",
   "deployment": {
     "recommended_free_platform": "render",
     "cost_brl": 0,
@@ -37,6 +37,25 @@
       "Preco de validacao: R$19",
       "Sem assinatura",
       "Uso imediato com fotos do proprio negocio"
+    ]
+  },
+  "checkout": {
+    "provider": "mercadopago",
+    "mode": "checkout_pro",
+    "statement_descriptor": "DIGITAL PACK",
+    "blocked_until_approved": true,
+    "webhook_signature_template": "id:[data.id_url];request-id:[x-request-id_header];ts:[ts_header];",
+    "release_requires_known_order": true,
+    "release_requires_live_mode": true,
+    "release_requires_amount_match": true,
+    "required_env": [
+      "FUNNEL_ENV",
+      "MP_ACCESS_TOKEN",
+      "MP_WEBHOOK_SECRET",
+      "DELIVERY_SECRET",
+      "PUBLIC_BASE_URL",
+      "REAL_SALES_APPROVED=true",
+      "PERSISTENCE_TRUSTED_FOR_REAL_SALES=true"
     ]
   },
   "guardrails": {
